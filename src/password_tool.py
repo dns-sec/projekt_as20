@@ -3,6 +3,9 @@ import argparse
 import secrets
 import string
 from pathlib import Path
+import hashlib
+import urllib.request
+import urllib.error
 
 PASSWORD_COUNT = 5
 PASSWORD_LENGTH = 10
@@ -30,6 +33,46 @@ def in_wordlist(password: str, wordlist_path: Path) -> bool:
                 return True
     return False
 
+HIBP_API_PREFIX = "https://api.pwnedpasswords.com/range/"
+
+def sha1_hex_upper(text: str) -> str:
+    return hashlib.sha1(text.encode("utf-8")).hexdigest().upper()
+
+def hibp_pwned_count(password: str, timeout: float = 5.0) -> int:
+    """
+    Returns the number of times a password appears in HIBP Pwned Passwords.
+    Uses k-anonymity: only the first 5 chars of SHA1 are sent.
+    Returns:
+      - 0 if not found
+      - >0 if found (pwned count)
+    Raises urllib.error.URLError on network errors.
+    """
+    sha1 = sha1_hex_upper(password)
+    prefix, suffix = sha1[:5], sha1[5:]
+
+    req = urllib.request.Request(
+        HIBP_API_PREFIX + prefix,
+        headers={
+            "User-Agent": "projekt_as20-password-tool",
+            "Add-Padding": "true",  # optional privacy enhancement
+        },
+    )
+
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        body = resp.read().decode("utf-8", errors="replace")
+
+    for line in body.splitlines():
+        # format: SUFFIX:COUNT
+        try:
+            sfx, cnt = line.split(":")
+        except ValueError:
+            continue
+        if sfx.strip().upper() == suffix:
+            try:
+                return int(cnt.strip())
+            except ValueError:
+                return 1
+    return 0
 
 def main() -> int:
     parser = argparse.ArgumentParser(
@@ -61,6 +104,18 @@ def main() -> int:
     help="Enable wordlist check using default wordlist (/usr/share/dict/words)",
     )
 
+    parser.add_argument(
+    "--hibp",
+    action="store_true",
+    help="Check generated passwords against Have I Been Pwned (k-anonymity).",
+    )
+
+    parser.add_argument(
+    "--hibp-timeout",
+    type=float,
+    default=5.0,
+    help="Timeout for HIBP requests in seconds (default: 5).",
+    )
 
     args = parser.parse_args()
 
@@ -87,17 +142,33 @@ def main() -> int:
     for _ in range(args.count):
         pw = generate_password(args.length)
 
+        tags = []
+
+        # Local wordlist tag
         if wordlist_path is not None:
             if in_wordlist(pw, wordlist_path):
-                print(f"{pw}  {COLOR_RED}[HIT in wordlist]{COLOR_RESET}")
+                tags.append(f"{COLOR_RED}[HIT local]{COLOR_RESET}")
             else:
-                print(f"{pw}  {COLOR_GREEN}[OK not in wordlist]{COLOR_RESET}")
+                tags.append(f"{COLOR_GREEN}[OK local]{COLOR_RESET}")
+
+        # HIBP tag
+        if args.hibp:
+            try:
+                count = hibp_pwned_count(pw, timeout=args.hibp_timeout)
+                if count > 0:
+                    tags.append(f"{COLOR_RED}[HIBP HIT: {count}]{COLOR_RESET}")
+                else:
+                    tags.append(f"{COLOR_GREEN}[HIBP OK]{COLOR_RESET}")
+            except urllib.error.URLError:
+                tags.append(f"{COLOR_RED}[HIBP ERROR]{COLOR_RESET}")
+
+        if tags:
+            print(pw, " ".join(tags))
         else:
             print(pw)
 
-    return 0
 
+    return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
