@@ -31,7 +31,7 @@ This way you can combine them into much longer sequences, and add special charac
 2. Open the `projekt_as20` folder in your terminal of choice
 
 3. Run `python3 pw.py`
-   - Run `python3 pw.py --help` to see all flags
+   - Run `python3 pw.py -h` to see all options
 
 ## 📄 Documentation
 
