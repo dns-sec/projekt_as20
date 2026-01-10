@@ -26,22 +26,14 @@ This way you can combine them into much longer sequences, and add special charac
    - To clear Bash: `history -c && history -w && clear`
    - To clear Pwsh: `Remove-Item (Get-PSReadLineOption).HistorySavePath`
 
-## ⚙️ Usage
+## ⚙️ How-To-Use
 
-Generate 5 passwords with 10 characters (default):
-`./pw.py`
+1. Install Python 3 if you haven't already, get it at https://www.python.org/downloads/
 
-Adjust (-n)umber and (-l)ength:
-`./pw.py -n <Number of PWs> -l <Length of PWs>`
+2. Open the `projekt_as20` folder in your terminal of choice
 
-Check against a word list of your own:
-`./pw.py --wl /path/to/wordlist.txt`
-
-Check against Have I Been Pwned (HIBP) (Requires internet connection):
-`./pw.py --hibp`
-
-Example usage:
-`./pw.py -n 10 -l 10 --hibp`
+3. Run `python3 pw.py`
+   - Run `python3 pw.py --help` to see all flags
 
 ## 📄 Documentation
 
@@ -50,7 +42,3 @@ Further documentation can be found in `docs/`:
 - `docs/overview.md` – Project overview.
 - `docs/usage.md` – Usage.
 - `docs/design.md` – Design and safety.
-
-## ⚠️ Requirements
-
-- Python 3.8+
