@@ -7,8 +7,6 @@ import hashlib
 import urllib.request
 import urllib.error
 
-print("Generating . . .\n")
-
 PASSWORD_COUNT = 5
 PASSWORD_LENGTH = 10
 
@@ -128,6 +126,8 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+
+    print("Generating . . .\n")
 
     # Default: always check all bundled wordlists
     wordlists = DEFAULT_WORDLISTS
