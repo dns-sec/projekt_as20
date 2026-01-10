@@ -2,7 +2,7 @@
 
 <div align="center">
 
-A Python3-based tool to generate secure passwords and check them against local and/or remote word lists to discover potential weak outputs.  
+A Python3-based tool to generate secure passwords and check them against local and/or remote wordlists to discover potential weak outputs.  
 
 The thought behind this is to create simple, yet secure, passwords so as to make them easy to memorize.  
 
@@ -14,9 +14,9 @@ This way you can combine them into much longer sequences, and add special charac
 
 - Generates random passwords with `secrets`
 
-- Supports checking against custom word lists
+- Supports checking against custom wordlists
 
-- Automatically checks against 3 (three) included standardized word lists
+- Automatically checks against 3 (three) included standardized wordlists
 
 - Uses SHA-1 for k-anonymity when checking with HIBP (the passwords never leave your terminal)
 
@@ -45,6 +45,6 @@ Documentation can also be found in `docs/`:
 
 - `docs/overview.md` – Project overview.
 - `docs/usage.md` – Usage.
-- `docs/design.md` – Design and safety.
+- `docs/design.md` – Design and thinking.
 
 Enjoy
