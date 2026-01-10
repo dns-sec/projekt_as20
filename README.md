@@ -12,7 +12,7 @@ This way you can combine them into much longer sequences, and add special charac
   
 </div>
 
-## ⭐ Functions
+## Features
 
 - Generates random passwords with `secrets`
 
@@ -26,7 +26,7 @@ This way you can combine them into much longer sequences, and add special charac
    - To remove terminal history on Linux: `history -c && history -w && clear`
    - To remove terminal history on Windows: `Remove-Item (Get-PSReadLineOption).HistorySavePath`
 
-## ⚙️ How-To-Use
+## How-To-Use
 
 1. Install Python 3 if you haven't already, get it at https://www.python.org/downloads/
 
@@ -35,7 +35,6 @@ This way you can combine them into much longer sequences, and add special charac
 3. Run `python3 pw.py`
    - Run `python3 pw.py -h` to see all options
 
-## 📄 Documentation
 
 <h4 align="center">A side-by-side of the script running on both Windows and Debian</h4>
 
@@ -43,11 +42,13 @@ This way you can combine them into much longer sequences, and add special charac
   <img src="images/demo.png" alt="Demo">
 </p>
 
+
 <h4 align="center">Roadmap for 2026</h4>
 
 <p align="center">
   <img src="images/roadmap26_27.png" alt="Roadmap">
 </p>
+
 
 Documentation can also be found in `docs/`:
 
