@@ -35,6 +35,12 @@ This way you can combine them into much longer sequences, and add special charac
 
 ## 📄 Documentation
 
+Below you can see a side-by-side of the script running on both Windows and Debian
+
+<p align="center">
+  <img src="screenshots/demo.png" alt="Demo screenshot">
+</p>
+
 Further documentation can be found in `docs/`:
 
 - `docs/overview.md` – Project overview.
