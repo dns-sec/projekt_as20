@@ -21,8 +21,8 @@ This way you can combine them into much longer sequences, and add special charac
 - Uses SHA-1 for k-anonymity when checking with HIBP (the passwords never leave your terminal)
 
 - NO storing or logging of passwords except in YOUR terminal history
-   - To clear Bash: `history -c && history -w && clear`
-   - To clear Pwsh: `Remove-Item (Get-PSReadLineOption).HistorySavePath`
+   - To remove terminal history on Linux: `history -c && history -w && clear`
+   - To remove terminal history on Windows: `Remove-Item (Get-PSReadLineOption).HistorySavePath`
 
 ## ⚙️ How-To-Use
 
