@@ -41,8 +41,10 @@ Below you can see a side-by-side of the script running on both Windows and Debia
   <img src="screenshots/demo.png" alt="Demo screenshot">
 </p>
 
-Further documentation can be found in `docs/`:
+Documentation can also be found in `docs/`:
 
 - `docs/overview.md` – Project overview.
 - `docs/usage.md` – Usage.
 - `docs/design.md` – Design and safety.
+
+Enjoy
