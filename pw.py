@@ -7,12 +7,21 @@ import hashlib
 import urllib.request
 import urllib.error
 
+print("Generating . . .\n")
+
 PASSWORD_COUNT = 5
 PASSWORD_LENGTH = 10
 
 CHARSET = string.ascii_lowercase + string.ascii_uppercase + string.digits
 
-DEFAULT_WORDLIST = Path("/usr/share/dict/words")
+BASE_DIR = Path(__file__).resolve().parent
+WORDLIST_DIR = BASE_DIR / "wordlists"
+
+DEFAULT_WORDLISTS = [
+    WORDLIST_DIR / "american.txt",
+    WORDLIST_DIR / "british.txt",
+    WORDLIST_DIR / "swedish.txt",
+]
 
 COLOR_GREEN = "\033[92m"
 COLOR_RED = "\033[91m"
@@ -31,6 +40,12 @@ def in_wordlist(password: str, wordlist_path: Path) -> bool:
         for line in f:
             if line.rstrip("\r\n") == password:
                 return True
+    return False
+
+def in_any_wordlist(password: str, wordlists: list[Path]) -> bool:
+    for wl in wordlists:
+        if in_wordlist(password, wl):
+            return True
     return False
 
 HIBP_API_PREFIX = "https://api.pwnedpasswords.com/range/"
@@ -90,18 +105,13 @@ def main() -> int:
         default=PASSWORD_LENGTH,
         help=f"Password length (default: {PASSWORD_LENGTH})",
     )
-    parser.add_argument(
-        "--wordlist",
-        type=str,
-        default=None,
-        help="Path to local wordlist for checking (optional). "
-             "If omitted, tries /usr/share/dict/words.",
-    )
 
     parser.add_argument(
     "--wl",
-    action="store_true",
-    help="Enable wordlist check using default wordlist (/usr/share/dict/words)",
+    type=str,
+    default=None,
+    metavar="PATH",
+    help="Override default wordlists and check only this wordlist file.",
     )
 
     parser.add_argument(
@@ -119,12 +129,12 @@ def main() -> int:
 
     args = parser.parse_args()
 
-    wordlist_path = None
-    if args.wordlist:
-        wordlist_path = Path(args.wordlist)
-    elif args.wl:
-        wordlist_path = DEFAULT_WORDLIST
+    # Default: always check all bundled wordlists
+    wordlists = DEFAULT_WORDLISTS
 
+    # If user specifies --wl PATH: override defaults and use only that file
+    if args.wl is not None:
+        wordlists = [Path(args.wl)]
 
     if args.count <= 0:
         print("ERROR: --count must be >= 1")
@@ -133,23 +143,29 @@ def main() -> int:
         print("ERROR: --length must be >= 1")
         return 2
 
-    if wordlist_path is not None and not wordlist_path.exists():
-        print(f"ERROR: Wordlist not found: {wordlist_path}")
-        print("Install a default wordlist with:")
-        print("  sudo apt update && sudo apt install wamerican")
+    missing = [wl for wl in wordlists if not wl.exists()]
+    if missing:
+        print("ERROR: Missing wordlist file(s):")
+        for wl in missing:
+            print(f"  - {wl}")
+        print("Fix: ensure the files exist (e.g. put them in ./wordlists/).")
         return 2
+
+    ok_local = hit_local = 0
+    ok_hibp = hit_hibp = 0
 
     for _ in range(args.count):
         pw = generate_password(args.length)
 
         tags = []
 
-        # Local wordlist tag
-        if wordlist_path is not None:
-            if in_wordlist(pw, wordlist_path):
-                tags.append(f"{COLOR_RED}[HIT local]{COLOR_RESET}")
-            else:
-                tags.append(f"{COLOR_GREEN}[OK local]{COLOR_RESET}")
+        # Local wordlist tag (always enabled)
+        if in_any_wordlist(pw, wordlists):
+            tags.append(f"{COLOR_RED}[HIT local]{COLOR_RESET}")
+            hit_local += 1
+        else:
+            tags.append(f"{COLOR_GREEN}[OK local]{COLOR_RESET}")
+            ok_local += 1
 
         # HIBP tag
         if args.hibp:
@@ -157,8 +173,10 @@ def main() -> int:
                 count = hibp_pwned_count(pw, timeout=args.hibp_timeout)
                 if count > 0:
                     tags.append(f"{COLOR_RED}[HIBP HIT: {count}]{COLOR_RESET}")
+                    hit_hibp += 1
                 else:
                     tags.append(f"{COLOR_GREEN}[HIBP OK]{COLOR_RESET}")
+                    ok_hibp += 1
             except urllib.error.URLError:
                 tags.append(f"{COLOR_RED}[HIBP ERROR]{COLOR_RESET}")
 
@@ -167,6 +185,21 @@ def main() -> int:
         else:
             print(pw)
 
+    print()
+    print("=" * 40)
+
+    print(
+        f"Local wordlists: "
+        f"{COLOR_GREEN}{ok_local} OK{COLOR_RESET} / "
+        f"{COLOR_RED}{hit_local} HIT{COLOR_RESET}"
+    )
+
+    if args.hibp:
+        print(
+            f"HIBP: "
+            f"{COLOR_GREEN}{ok_hibp} OK{COLOR_RESET} / "
+            f"{COLOR_RED}{hit_hibp} HIT{COLOR_RESET}"
+        )
 
     return 0
 
