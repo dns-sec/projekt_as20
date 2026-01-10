@@ -2,7 +2,7 @@
 
 <div align="center">
 
-A Python-based tool to generate secure passwords and check them against local and/or remote word lists to discover potential weak outputs.  
+A Python3-based tool to generate secure passwords and check them against local and/or remote word lists to discover potential weak outputs.  
 
 The thought behind this is to create simple, yet secure, passwords so as to make them easy to memorize.  
 
@@ -14,15 +14,13 @@ This way you can combine them into much longer sequences, and add special charac
 
 - Generates random passwords with `secrets`
 
-- Support for custom number and length
+- Supports checking against custom word lists
 
-- Support for optional check against word lists
+- Automatically checks against 3 (three) included standardized word lists
 
-- 🛡️ Automatically checks against 3 (three) included standardized word lists
+- Uses SHA-1 for k-anonymity when checking with HIBP (the passwords never leave your terminal)
 
-- 🛡️ Uses SHA-1 for k-anonymity when checking with HIBP (the passwords never leave your terminal)
-
-- 🛡️ NO storing or logging of passwords except in YOUR terminal history
+- NO storing or logging of passwords except in YOUR terminal history
    - To clear Bash: `history -c && history -w && clear`
    - To clear Pwsh: `Remove-Item (Get-PSReadLineOption).HistorySavePath`
 
