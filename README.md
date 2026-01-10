@@ -1,4 +1,6 @@
-<h1 align="center">🛡️ Secure Password Generator 🛡️</h1>
+<p align="center">
+  <img src="images/secgen.png" alt="SecGen">
+</p>
 
 <div align="center">
 
