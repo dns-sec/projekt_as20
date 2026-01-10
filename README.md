@@ -35,10 +35,16 @@ This way you can combine them into much longer sequences, and add special charac
 
 ## 📄 Documentation
 
-Below you can see a side-by-side of the script running on both Windows and Debian
+<h4 align="center">A side-by-side of the script running on both Windows and Debian</h4>
 
 <p align="center">
-  <img src="screenshots/demo.png" alt="Demo screenshot">
+  <img src="images/demo.png" alt="Demo">
+</p>
+
+<h4 align="center">Roadmap for 2026</h4>
+
+<p align="center">
+  <img src="images/roadmap26_27.png" alt="Roadmap">
 </p>
 
 Documentation can also be found in `docs/`:
