@@ -6,7 +6,7 @@ A Python3-based tool to generate secure passwords and check them against local a
 
 The thought behind this is to create simple, yet secure, passwords so as to make them easy to memorize.  
 
-This way you can combine them into much longer sequences, and add special characters where convenient, while still keeping them locked tight in your head.
+This way you can combine them into much longer sequences, and add special characters where convenient, while still being able to memorize them.
   
 </div>
 
