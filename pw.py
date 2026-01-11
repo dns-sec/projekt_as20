@@ -10,7 +10,8 @@ import urllib.error
 PASSWORD_COUNT = 5
 PASSWORD_LENGTH = 10
 
-CHARSET = string.ascii_lowercase + string.ascii_uppercase + string.digits
+CHARSET = string.ascii_lowercase + string.ascii_uppercase + string.digits 
+# Lägg till string.punctuation för att kunna skappa lösenord med symboler för att öka styrkan på lösenorden.
 
 BASE_DIR = Path(__file__).resolve().parent
 WORDLIST_DIR = BASE_DIR / "wordlists"
