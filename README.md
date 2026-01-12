@@ -46,7 +46,7 @@ This way you can combine them into much longer sequences, and add special charac
 <h4 align="center">Roadmap for 2026</h4>
 
 <p align="center">
-  <img src="images/roadmap26_27.png" alt="Roadmap 2026">
+  <img src="images/roadmap_v2.png" alt="Roadmap 2026">
 </p>
 
 
